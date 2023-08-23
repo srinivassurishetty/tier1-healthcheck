@@ -1,8 +1,8 @@
 apiVersion: install.tetrate.io/v1alpha1
-kind: IngressGateway
+kind: Tier1Gateway
 metadata:
-  name: bookinfo-gateway
-  namespace: bookinfo-2
+  name: tier1-gateway
+  namespace: t1-bookinfo
 spec:
   connectionDrainDuration: 5s
   kubeSpec:
@@ -40,18 +40,18 @@ spec:
     overlays:
     - apiVersion: apps/v1
       kind: Deployment
-      name: bookinfo-gateway
+      name: tier1-gateway
       patches:
       - path: spec.template.spec.containers[-1]
         value:
-          image: t1failovergw.azurecr.io/t1-healthcheck:test-4
+          image: t1failovergw.azurecr.io/t1-healthcheck:srini-hs-image7
           env:
           - name: LOCAL_HEALTHCHECK_PORT
-            value: "8080"
+            value: "8443"
           - name: REMOTE_HEALTHCHECK_PORT
-            value: "80"
+            value: "443"
           - name: REGION
-            value: "us-west-1"
+            value: "eastus"
           - name: RETRIES
             value: "3"
           - name: HEALTH_CHECK_INTERVAL
